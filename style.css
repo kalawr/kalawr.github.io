@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Neuton', serif;
+    font-family: serif;
     font-weight: 300;
     margin: 0 75px;
     font-size: 18px;
@@ -13,13 +13,13 @@ body {
 }
 
 .main {
-    font-family: 'Gilda Display';
+    font-family: 'Gilda Display', serif;
     font-size: 32px;
     font-weight: 200;
-    line-height: 1.6;
-    margin-top: 150px;
-    margin-bottom: 250px;
-    max-width: 700px ;
+    line-height: 1.7;
+    margin-top: 100px;
+    margin-bottom: 150px;
+    max-width: 830px;
 }
 
 @media (max-width: 550px) {
