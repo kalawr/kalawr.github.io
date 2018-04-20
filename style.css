@@ -7,7 +7,7 @@
 body {
     font-family: serif;
     font-weight: 300;
-    margin: 0 75px;
+    margin: 100px 75px 20px;
     font-size: 18px;
     color: black;
 }
@@ -17,8 +17,7 @@ body {
     font-size: 32px;
     font-weight: 200;
     line-height: 1.7;
-    margin-top: 100px;
-    margin-bottom: 150px;
+    margin-bottom: 100px;
     max-width: 830px;
 }
 
@@ -51,7 +50,7 @@ h2 {
     text-align: right;
 }
 
-ul {
+nav ul {
     list-style-type: none;
 
     margin: 0 0 0 -1em;
@@ -61,19 +60,19 @@ ul {
     justify-content: flex-end;
 }
 
-ul li {
+nav ul li {
     line-height: 1.6;
     margin-left: 1em;
 }
 
-ul li::before {
+nav ul li::before {
     content: "\2014";
     display: inline-block;
     padding-right: 1em;
     color: #ddd;
 }
 
-ul li:first-child::before {
+nav ul li:first-child::before {
     content: "";
 }
 
@@ -82,4 +81,8 @@ a {
     color: inherit;
     border-bottom: 1px solid #ddd;
     padding-bottom: 2px;
+}
+
+.done {
+    text-decoration: line-through;
 }
