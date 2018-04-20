@@ -1,0 +1,82 @@
+[
+    {
+        "description": "Go to mountains",
+        "achieved": false
+    },
+    {
+        "description": "Go to a place inhabited by monkeys",
+        "achieved": false
+    },
+    {
+        "description": "Learn a second foreign language",
+        "achieved": false
+    },
+    {
+        "description": "Earn a mention in mass media",
+        "achieved": false
+    },
+    {
+        "description": "Save $1,000",
+        "achieved": false
+    },
+    {
+        "description": "Save $20,000",
+        "achieved": false
+    },
+    {
+        "description": "Create a personal website",
+        "achieved": true
+    },
+    {
+        "description": "Learn to swear",
+        "achieved": true
+    },
+    {
+        "description": "Get to work abroad",
+        "achieved": false
+    },
+    {
+        "description": "Find a calling",
+        "achieved": false
+    },
+    {
+        "description": "Rethink and refurbish my home to best fit my lifestyle",
+        "achieved": false
+    },
+    {
+        "description": "Develop an English accent to be proud of",
+        "achieved": false
+    },
+    {
+        "description": "Visit a major tech conference",
+        "achieved": false
+    },
+    {
+        "description": "Move out of Belarus for good",
+        "achieved": false
+    },
+    {
+        "description": "Get paid for a product",
+        "achieved": false
+    },
+    {
+        "description": "Get paid a web development project",
+        "achieved": false
+    },
+    {
+        "description": "Publish a website",
+        "achieved": true
+    },
+    {
+        "description": "Improve my smile",
+        "achieved": false
+    },
+    {
+        "description": "Learn photography",
+        "achieved": false
+    },
+    {
+        "description": "Get a high-end laptop",
+        "achieved": false
+    }
+]
