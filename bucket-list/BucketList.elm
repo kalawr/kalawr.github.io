@@ -104,7 +104,7 @@ view model =
     in
     div []
         [ h1 [] [ text "Bucket List" ]
-        , label []
+        , label [ class "bucket-list-toggle"]
             [ input [ type_ "checkbox", checked model.showAchieved, onClick ToggleShowAchieved ] []
             , text "Show achieved items"
             ]
@@ -115,7 +115,8 @@ view model =
 
 item i =
     li [ classList [ ( "done", i.achieved ) ] ]
-        [ text i.description
+        [ if i.achieved then (span [ class "icon-check" ] []) else (text "") 
+        , span [ class "bucket-list-description" ] [ text i.description ]
         ]
 
 

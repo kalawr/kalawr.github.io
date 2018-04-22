@@ -9048,8 +9048,30 @@ var _user$project$BucketList$item = function (i) {
 		},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(i.description),
-			_1: {ctor: '[]'}
+			_0: i.achieved ? A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('icon-check'),
+					_1: {ctor: '[]'}
+				},
+				{ctor: '[]'}) : _elm_lang$html$Html$text(''),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$span,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('bucket-list-description'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(i.description),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
 		});
 };
 var _user$project$BucketList$update = F2(
@@ -9154,7 +9176,11 @@ var _user$project$BucketList$view = function (model) {
 				ctor: '::',
 				_0: A2(
 					_elm_lang$html$Html$label,
-					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('bucket-list-toggle'),
+						_1: {ctor: '[]'}
+					},
 					{
 						ctor: '::',
 						_0: A2(
