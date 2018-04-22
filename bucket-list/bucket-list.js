@@ -9065,6 +9065,7 @@ var _user$project$BucketList$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			} else {
+				var _p1 = A2(_elm_lang$core$Debug$log, 'err', _p0._0._0);
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			}
 		} else {
@@ -9077,6 +9078,17 @@ var _user$project$BucketList$update = F2(
 			};
 		}
 	});
+var _user$project$BucketList$googleSheetCheckboxDecoder = A2(
+	_elm_lang$core$Json_Decode$andThen,
+	function (string) {
+		var _p2 = string;
+		if (_p2 === 'TRUE') {
+			return _elm_lang$core$Json_Decode$succeed(true);
+		} else {
+			return _elm_lang$core$Json_Decode$succeed(false);
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
 var _user$project$BucketList$Model = F2(
 	function (a, b) {
 		return {items: a, showAchieved: b};
@@ -9090,18 +9102,39 @@ var _user$project$BucketList$itemDecoder = A3(
 	_user$project$BucketList$Item,
 	A2(_elm_lang$core$Json_Decode$field, 'description', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'achieved', _elm_lang$core$Json_Decode$bool));
-var _user$project$BucketList$initialRequest = A2(
-	_elm_lang$http$Http$get,
-	'/bucket-list/bucket-list.json',
-	_elm_lang$core$Json_Decode$list(_user$project$BucketList$itemDecoder));
+var _user$project$BucketList$googleSheetCheckedItemDecoder = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$BucketList$Item,
+	A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$index, 1, _user$project$BucketList$googleSheetCheckboxDecoder));
+var _user$project$BucketList$googleSheetUncheckedItemDecoder = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$BucketList$Item,
+	A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$string),
+	_elm_lang$core$Json_Decode$succeed(false));
+var _user$project$BucketList$googleSheetItemDecoder = _elm_lang$core$Json_Decode$oneOf(
+	{
+		ctor: '::',
+		_0: _user$project$BucketList$googleSheetCheckedItemDecoder,
+		_1: {
+			ctor: '::',
+			_0: _user$project$BucketList$googleSheetUncheckedItemDecoder,
+			_1: {ctor: '[]'}
+		}
+	});
+var _user$project$BucketList$googleSheetResponseDecoder = A2(
+	_elm_lang$core$Json_Decode$field,
+	'values',
+	_elm_lang$core$Json_Decode$list(_user$project$BucketList$googleSheetItemDecoder));
+var _user$project$BucketList$initialRequest = A2(_elm_lang$http$Http$get, 'https://sheets.googleapis.com/v4/spreadsheets/1Ehi5fNGVOfIR93FN5N4fNWfacvgSU17Vi3oFFmg17C8/values/Sheet1!A1:C99?key=AIzaSyBbS6tLJC7EKZBmeiAywSlzTOQ-selKBns', _user$project$BucketList$googleSheetResponseDecoder);
 var _user$project$BucketList$ToggleShowAchieved = {ctor: 'ToggleShowAchieved'};
 var _user$project$BucketList$view = function (model) {
 	var list = model.showAchieved ? model.items : A2(
 		_elm_lang$core$List$filter,
-		function (_p1) {
+		function (_p3) {
 			return !function (_) {
 				return _.achieved;
-			}(_p1);
+			}(_p3);
 		},
 		model.items);
 	return A2(
@@ -9150,7 +9183,11 @@ var _user$project$BucketList$view = function (model) {
 					ctor: '::',
 					_0: A2(
 						_elm_lang$html$Html$ul,
-						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('bucket'),
+							_1: {ctor: '[]'}
+						},
 						A2(_elm_lang$core$List$map, _user$project$BucketList$item, list)),
 					_1: {ctor: '[]'}
 				}

@@ -29,8 +29,8 @@ init =
 
 initialRequest =
     Http.get
-        "/bucket-list/bucket-list.json"
-        (Json.list itemDecoder)
+        "https://sheets.googleapis.com/v4/spreadsheets/1Ehi5fNGVOfIR93FN5N4fNWfacvgSU17Vi3oFFmg17C8/values/Sheet1!A1:C99?key=AIzaSyBbS6tLJC7EKZBmeiAywSlzTOQ-selKBns"
+        googleSheetResponseDecoder
 
 
 itemDecoder =
@@ -38,6 +38,33 @@ itemDecoder =
         (field "description" string)
         (field "achieved" bool)
 
+googleSheetResponseDecoder =
+    (Json.field "values" (Json.list googleSheetItemDecoder))
+
+googleSheetItemDecoder =
+    Json.oneOf [googleSheetCheckedItemDecoder, googleSheetUncheckedItemDecoder]
+
+googleSheetCheckedItemDecoder =
+    map2 Item
+        (Json.index 0 string)
+        (Json.index 1 googleSheetCheckboxDecoder)
+
+googleSheetUncheckedItemDecoder =
+    map2 Item
+        (Json.index 0 string)
+        (Json.succeed False)
+
+
+googleSheetCheckboxDecoder =
+    Json.string
+        |> Json.andThen
+            (\string ->
+                case string of
+                    "TRUE" ->
+                        Json.succeed True
+                    _ ->
+                        Json.succeed False
+            )
 
 type Msg
     = InitialResponse (Result Http.Error (List Item))
@@ -51,7 +78,11 @@ update msg model =
             , Cmd.none
             )
 
-        InitialResponse (Err _) ->
+        InitialResponse (Err err) ->
+            let
+                _ =
+                    Debug.log "err" err
+            in
             ( model
             , Cmd.none
             )
@@ -77,7 +108,7 @@ view model =
             [ input [ type_ "checkbox", checked model.showAchieved, onClick ToggleShowAchieved ] []
             , text "Show achieved items"
             ]
-        , ul []
+        , ul [class "bucket"]
             (list |> List.map item)
         ]
 
