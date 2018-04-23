@@ -4,122 +4,200 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
-import Json.Decode as Json exposing (bool, field, list, map2, string)
+import Json.Decode as Json
+import Random
+import Random.List
+import RemoteData exposing (RemoteData(..), WebData)
+import Task exposing (Task)
+import Time
 
 
 type alias Model =
-    { items : List Item
-    , showAchieved : Bool
+    { items : WebData (List Item)
+    , showDone : Bool
     }
 
 
 type alias Item =
     { description : String
-    , achieved : Bool
+    , done : Bool
     }
 
 
+init : ( Model, Cmd Msg )
 init =
-    ( { items = []
-      , showAchieved = True
+    ( { items = Loading
+      , showDone = True
       }
-    , Http.send InitialResponse initialRequest
+    , initialRequest
+        |> Http.toTask
+        |> Task.andThen shuffle
+        |> RemoteData.asCmd
+        |> Cmd.map InitialResponse
     )
 
 
+shuffle : List Item -> Task e (List Item)
+shuffle items =
+    Time.now
+        |> Task.map
+            (\time ->
+                time
+                    |> round
+                    |> Random.initialSeed
+                    |> Random.step (Random.List.shuffle items)
+                    |> Tuple.first
+            )
+
+
+sheetId : String
+sheetId =
+    "1Ehi5fNGVOfIR93FN5N4fNWfacvgSU17Vi3oFFmg17C8"
+
+
+sheetUri : String
+sheetUri =
+    String.concat
+        [ "https://sheets.googleapis.com/v4/spreadsheets/"
+        , sheetId
+        , "/values/Sheet1!A1:C99?key=AIzaSyBbS6tLJC7EKZBmeiAywSlzTOQ-selKBns"
+        ]
+
+
+initialRequest : Http.Request (List Item)
 initialRequest =
     Http.get
-        "https://sheets.googleapis.com/v4/spreadsheets/1Ehi5fNGVOfIR93FN5N4fNWfacvgSU17Vi3oFFmg17C8/values/Sheet1!A1:C99?key=AIzaSyBbS6tLJC7EKZBmeiAywSlzTOQ-selKBns"
-        googleSheetResponseDecoder
+        sheetUri
+        decoder
 
 
+decoder : Json.Decoder (List Item)
+decoder =
+    Json.field "values" (Json.list itemDecoder)
+
+
+itemDecoder : Json.Decoder Item
 itemDecoder =
-    map2 Item
-        (field "description" string)
-        (field "achieved" bool)
+    Json.oneOf
+        [ checkedItemDecoder
+        , uncheckedItemDecoder
+        ]
 
-googleSheetResponseDecoder =
-    (Json.field "values" (Json.list googleSheetItemDecoder))
 
-googleSheetItemDecoder =
-    Json.oneOf [googleSheetCheckedItemDecoder, googleSheetUncheckedItemDecoder]
+checkedItemDecoder : Json.Decoder Item
+checkedItemDecoder =
+    Json.map2 Item
+        (Json.index 0 Json.string)
+        (Json.index 1 checkboxDecoder)
 
-googleSheetCheckedItemDecoder =
-    map2 Item
-        (Json.index 0 string)
-        (Json.index 1 googleSheetCheckboxDecoder)
 
-googleSheetUncheckedItemDecoder =
-    map2 Item
-        (Json.index 0 string)
+uncheckedItemDecoder : Json.Decoder Item
+uncheckedItemDecoder =
+    Json.map2 Item
+        (Json.index 0 Json.string)
         (Json.succeed False)
 
 
-googleSheetCheckboxDecoder =
+checkboxDecoder : Json.Decoder Bool
+checkboxDecoder =
     Json.string
         |> Json.andThen
             (\string ->
                 case string of
                     "TRUE" ->
                         Json.succeed True
+
                     _ ->
                         Json.succeed False
             )
 
+
 type Msg
-    = InitialResponse (Result Http.Error (List Item))
-    | ToggleShowAchieved
+    = InitialResponse (WebData (List Item))
+    | ToggleShowDone
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        InitialResponse (Ok items) ->
-            ( { model | items = items }
+        InitialResponse response ->
+            ( { model | items = response }
             , Cmd.none
             )
 
-        InitialResponse (Err err) ->
-            let
-                _ =
-                    Debug.log "err" err
-            in
-            ( model
-            , Cmd.none
-            )
-
-        ToggleShowAchieved ->
-            ( { model | showAchieved = not model.showAchieved }
+        ToggleShowDone ->
+            ( { model | showDone = not model.showDone }
             , Cmd.none
             )
 
 
+view : Model -> Html Msg
 view model =
-    let
-        list =
-            if model.showAchieved then
-                model.items
-            else
-                model.items
-                    |> List.filter (not << .achieved)
-    in
     div []
         [ h1 [] [ text "Bucket List" ]
-        , label [ class "bucket-list-toggle"]
-            [ input [ type_ "checkbox", checked model.showAchieved, onClick ToggleShowAchieved ] []
+        , description model.items
+        , label [ class "bucket-list-toggle" ]
+            [ input [ type_ "checkbox", checked model.showDone, onClick ToggleShowDone ] []
             , text "Show achieved items"
             ]
-        , ul [class "bucket"]
-            (list |> List.map item)
+        , list model
         ]
 
 
+description : WebData (List Item) -> Html Msg
+description webdata =
+    case RemoteData.toMaybe webdata of
+        Just items ->
+            let
+                n =
+                    List.length items
+            in
+            p []
+                [ text (toString n)
+                , text " things to do before I die."
+                ]
+
+        Nothing ->
+            text ""
+
+
+list : Model -> Html Msg
+list model =
+    case model.items of
+        Success items ->
+            let
+                list =
+                    if model.showDone then
+                        items
+                    else
+                        items
+                            |> List.filter (not << .done)
+            in
+            ul [ class "bucket" ]
+                (list |> List.map item)
+
+        Loading ->
+            text "Loading..."
+
+        Failure _ ->
+            text "Error fetching bucket list items"
+
+        NotAsked ->
+            text ""
+
+
+item : Item -> Html Msg
 item i =
-    li [ classList [ ( "done", i.achieved ) ] ]
-        [ if i.achieved then (span [ class "icon-check" ] []) else (text "") 
+    li [ classList [ ( "done", i.done ) ] ]
+        [ if i.done then
+            span [ class "icon-check" ] []
+          else
+            text ""
         , span [ class "bucket-list-description" ] [ text i.description ]
         ]
 
 
+main : Program Never Model Msg
 main =
     Html.program
         { init = init
