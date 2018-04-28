@@ -1,5 +1,6 @@
 module BucketList exposing (..)
 
+import Date
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -9,12 +10,13 @@ import Random
 import Random.List
 import RemoteData exposing (RemoteData(..), WebData)
 import Task exposing (Task)
-import Time
+import Time exposing (Time)
 
 
 type alias Model =
     { items : WebData (List Item)
     , showDone : Bool
+    , now : Maybe Time
     }
 
 
@@ -28,12 +30,16 @@ init : ( Model, Cmd Msg )
 init =
     ( { items = Loading
       , showDone = True
+      , now = Nothing
       }
-    , initialRequest
-        |> Http.toTask
-        |> Task.andThen shuffle
-        |> RemoteData.asCmd
-        |> Cmd.map InitialResponse
+    , Cmd.batch
+        [ initialRequest
+            |> Http.toTask
+            |> Task.andThen shuffle
+            |> RemoteData.asCmd
+            |> Cmd.map InitialResponse
+        , Task.perform NewTime Time.now
+        ]
     )
 
 
@@ -55,12 +61,18 @@ sheetId =
     "1Ehi5fNGVOfIR93FN5N4fNWfacvgSU17Vi3oFFmg17C8"
 
 
+googleApiKey : String
+googleApiKey =
+    "AIzaSyBbS6tLJC7EKZBmeiAywSlzTOQ-selKBns"
+
+
 sheetUri : String
 sheetUri =
     String.concat
         [ "https://sheets.googleapis.com/v4/spreadsheets/"
         , sheetId
-        , "/values/Sheet1!A1:C99?key=AIzaSyBbS6tLJC7EKZBmeiAywSlzTOQ-selKBns"
+        , "/values/Sheet1!A1:C99?key="
+        , googleApiKey
         ]
 
 
@@ -115,6 +127,7 @@ checkboxDecoder =
 type Msg
     = InitialResponse (WebData (List Item))
     | ToggleShowDone
+    | NewTime Time
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -130,51 +143,23 @@ update msg model =
             , Cmd.none
             )
 
+        NewTime time ->
+            ( { model | now = Just time }
+            , Cmd.none
+            )
+
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ h1 [] [ text "Bucket List" ]
-        , description model.items
-        , label [ class "bucket-list-toggle" ]
-            [ input [ type_ "checkbox", checked model.showDone, onClick ToggleShowDone ] []
-            , text "Show achieved items"
-            ]
-        , list model
-        ]
-
-
-description : WebData (List Item) -> Html Msg
-description webdata =
-    case RemoteData.toMaybe webdata of
-        Just items ->
-            let
-                n =
-                    List.length items
-            in
-            p []
-                [ text (toString n)
-                , text " things to do before I die."
-                ]
-
-        Nothing ->
-            text ""
-
-
-list : Model -> Html Msg
-list model =
     case model.items of
         Success items ->
-            let
-                list =
-                    if model.showDone then
-                        items
-                    else
-                        items
-                            |> List.filter (not << .done)
-            in
-            ul [ class "bucket" ]
-                (list |> List.map item)
+            div []
+                [ h1 [] [ text "Bucket List" ]
+                , description items
+                , progress items model.now
+                , toggle model.showDone
+                , list items model
+                ]
 
         Loading ->
             text "Loading..."
@@ -186,15 +171,124 @@ list model =
             text ""
 
 
+description : List Item -> Html Msg
+description items =
+    let
+        n =
+            List.length items
+    in
+    p []
+        [ text (toString n)
+        , text " things to do before I die."
+        ]
+
+
+progress : List Item -> Maybe Time -> Html Msg
+progress items now =
+    Maybe.map
+        (\time ->
+            let
+                life =
+                    lifeProgress time
+                        |> roundProgress
+                        |> toString
+
+                list =
+                    listProgress items
+                        |> roundProgress
+                        |> toString
+            in
+            div []
+                [ p []
+                    [ text "List progress "
+                    , meter [ value list ] []
+                    ]
+                , p []
+                    [ text "Life progress "
+                    , meter [ value life ] []
+                    ]
+                ]
+        )
+        now
+        |> Maybe.withDefault (text "")
+
+
+toggle : Bool -> Html Msg
+toggle showDone =
+    label [ class "bucket-list-toggle" ]
+        [ input [ type_ "checkbox", checked showDone, onClick ToggleShowDone ] []
+        , text "Show achieved items"
+        ]
+
+
+list : List Item -> Model -> Html Msg
+list items model =
+    let
+        list =
+            if model.showDone then
+                items
+            else
+                items
+                    |> List.filter (not << .done)
+    in
+    ul [ class "bucket" ]
+        (list |> List.map item)
+
+
 item : Item -> Html Msg
 item i =
     li [ classList [ ( "done", i.done ) ] ]
-        [ if i.done then
-            span [ class "icon-check" ] []
-          else
-            text ""
-        , span [ class "bucket-list-description" ] [ text i.description ]
+        [ span [ class "bucket-list-description" ] [ text i.description ]
         ]
+
+
+{-| Source: `https://www.indexmundi.com/belarus/life_expectancy_at_birth.html`
+-}
+belarusianMaleLifeExpectancy : Float
+belarusianMaleLifeExpectancy =
+    67.5 * Time.hour * 24 * 365
+
+
+birthday : Time
+birthday =
+    Date.fromString "August 21, 1992"
+        |> Result.map Date.toTime
+        |> Result.withDefault 0
+
+
+listProgress : List Item -> Float
+listProgress list =
+    let
+        completed =
+            list
+                |> List.filter .done
+                |> List.length
+                |> toFloat
+
+        all =
+            list
+                |> List.length
+                |> toFloat
+    in
+    completed / all
+
+
+lifeProgress : Time -> Float
+lifeProgress now =
+    let
+        estimatedAgeOfDeath =
+            birthday + belarusianMaleLifeExpectancy
+    in
+    (now - birthday) / estimatedAgeOfDeath
+
+
+roundProgress : Float -> Float
+roundProgress n =
+    n
+        |> (*) 100
+        |> round
+        |> toFloat
+        |> (\a -> (/) a 100)
 
 
 main : Program Never Model Msg

@@ -6198,6 +6198,72 @@ var _elm_community$random_extra$Random_Extra$maybe = F2(
 			genBool);
 	});
 
+//import Result //
+
+var _elm_lang$core$Native_Date = function() {
+
+function fromString(str)
+{
+	var date = new Date(str);
+	return isNaN(date.getTime())
+		? _elm_lang$core$Result$Err('Unable to parse \'' + str + '\' as a date. Dates must be in the ISO 8601 format.')
+		: _elm_lang$core$Result$Ok(date);
+}
+
+var dayTable = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+var monthTable =
+	['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+	 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+return {
+	fromString: fromString,
+	year: function(d) { return d.getFullYear(); },
+	month: function(d) { return { ctor: monthTable[d.getMonth()] }; },
+	day: function(d) { return d.getDate(); },
+	hour: function(d) { return d.getHours(); },
+	minute: function(d) { return d.getMinutes(); },
+	second: function(d) { return d.getSeconds(); },
+	millisecond: function(d) { return d.getMilliseconds(); },
+	toTime: function(d) { return d.getTime(); },
+	fromTime: function(t) { return new Date(t); },
+	dayOfWeek: function(d) { return { ctor: dayTable[d.getDay()] }; }
+};
+
+}();
+var _elm_lang$core$Date$millisecond = _elm_lang$core$Native_Date.millisecond;
+var _elm_lang$core$Date$second = _elm_lang$core$Native_Date.second;
+var _elm_lang$core$Date$minute = _elm_lang$core$Native_Date.minute;
+var _elm_lang$core$Date$hour = _elm_lang$core$Native_Date.hour;
+var _elm_lang$core$Date$dayOfWeek = _elm_lang$core$Native_Date.dayOfWeek;
+var _elm_lang$core$Date$day = _elm_lang$core$Native_Date.day;
+var _elm_lang$core$Date$month = _elm_lang$core$Native_Date.month;
+var _elm_lang$core$Date$year = _elm_lang$core$Native_Date.year;
+var _elm_lang$core$Date$fromTime = _elm_lang$core$Native_Date.fromTime;
+var _elm_lang$core$Date$toTime = _elm_lang$core$Native_Date.toTime;
+var _elm_lang$core$Date$fromString = _elm_lang$core$Native_Date.fromString;
+var _elm_lang$core$Date$now = A2(_elm_lang$core$Task$map, _elm_lang$core$Date$fromTime, _elm_lang$core$Time$now);
+var _elm_lang$core$Date$Date = {ctor: 'Date'};
+var _elm_lang$core$Date$Sun = {ctor: 'Sun'};
+var _elm_lang$core$Date$Sat = {ctor: 'Sat'};
+var _elm_lang$core$Date$Fri = {ctor: 'Fri'};
+var _elm_lang$core$Date$Thu = {ctor: 'Thu'};
+var _elm_lang$core$Date$Wed = {ctor: 'Wed'};
+var _elm_lang$core$Date$Tue = {ctor: 'Tue'};
+var _elm_lang$core$Date$Mon = {ctor: 'Mon'};
+var _elm_lang$core$Date$Dec = {ctor: 'Dec'};
+var _elm_lang$core$Date$Nov = {ctor: 'Nov'};
+var _elm_lang$core$Date$Oct = {ctor: 'Oct'};
+var _elm_lang$core$Date$Sep = {ctor: 'Sep'};
+var _elm_lang$core$Date$Aug = {ctor: 'Aug'};
+var _elm_lang$core$Date$Jul = {ctor: 'Jul'};
+var _elm_lang$core$Date$Jun = {ctor: 'Jun'};
+var _elm_lang$core$Date$May = {ctor: 'May'};
+var _elm_lang$core$Date$Apr = {ctor: 'Apr'};
+var _elm_lang$core$Date$Mar = {ctor: 'Mar'};
+var _elm_lang$core$Date$Feb = {ctor: 'Feb'};
+var _elm_lang$core$Date$Jan = {ctor: 'Jan'};
+
 var _elm_community$random_extra$Random_List$get = F2(
 	function (index, list) {
 		return _elm_lang$core$List$head(
@@ -10046,6 +10112,51 @@ var _krisajenkins$remotedata$RemoteData$update = F2(
 		}
 	});
 
+var _user$project$BucketList$roundProgress = function (n) {
+	return function (a) {
+		return A2(
+			F2(
+				function (x, y) {
+					return x / y;
+				}),
+			a,
+			100);
+	}(
+		_elm_lang$core$Basics$toFloat(
+			_elm_lang$core$Basics$round(
+				A2(
+					F2(
+						function (x, y) {
+							return x * y;
+						}),
+					100,
+					n))));
+};
+var _user$project$BucketList$listProgress = function (list) {
+	var all = _elm_lang$core$Basics$toFloat(
+		_elm_lang$core$List$length(list));
+	var completed = _elm_lang$core$Basics$toFloat(
+		_elm_lang$core$List$length(
+			A2(
+				_elm_lang$core$List$filter,
+				function (_) {
+					return _.done;
+				},
+				list)));
+	return completed / all;
+};
+var _user$project$BucketList$birthday = A2(
+	_elm_lang$core$Result$withDefault,
+	0,
+	A2(
+		_elm_lang$core$Result$map,
+		_elm_lang$core$Date$toTime,
+		_elm_lang$core$Date$fromString('August 21, 1992')));
+var _user$project$BucketList$belarusianMaleLifeExpectancy = ((67.5 * _elm_lang$core$Time$hour) * 24) * 365;
+var _user$project$BucketList$lifeProgress = function (now) {
+	var estimatedAgeOfDeath = _user$project$BucketList$birthday + _user$project$BucketList$belarusianMaleLifeExpectancy;
+	return (now - _user$project$BucketList$birthday) / estimatedAgeOfDeath;
+};
 var _user$project$BucketList$item = function (i) {
 	return A2(
 		_elm_lang$html$Html$li,
@@ -10061,114 +10172,165 @@ var _user$project$BucketList$item = function (i) {
 		},
 		{
 			ctor: '::',
-			_0: i.done ? A2(
+			_0: A2(
 				_elm_lang$html$Html$span,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('icon-check'),
+					_0: _elm_lang$html$Html_Attributes$class('bucket-list-description'),
 					_1: {ctor: '[]'}
 				},
-				{ctor: '[]'}) : _elm_lang$html$Html$text(''),
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(i.description),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$BucketList$list = F2(
+	function (items, model) {
+		var list = model.showDone ? items : A2(
+			_elm_lang$core$List$filter,
+			function (_p0) {
+				return !function (_) {
+					return _.done;
+				}(_p0);
+			},
+			items);
+		return A2(
+			_elm_lang$html$Html$ul,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('bucket'),
+				_1: {ctor: '[]'}
+			},
+			A2(_elm_lang$core$List$map, _user$project$BucketList$item, list));
+	});
+var _user$project$BucketList$progress = F2(
+	function (items, now) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			_elm_lang$html$Html$text(''),
+			A2(
+				_elm_lang$core$Maybe$map,
+				function (time) {
+					var list = _elm_lang$core$Basics$toString(
+						_user$project$BucketList$roundProgress(
+							_user$project$BucketList$listProgress(items)));
+					var life = _elm_lang$core$Basics$toString(
+						_user$project$BucketList$roundProgress(
+							_user$project$BucketList$lifeProgress(time)));
+					return A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('List progress '),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$meter,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$value(list),
+												_1: {ctor: '[]'}
+											},
+											{ctor: '[]'}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$p,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Life progress '),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$meter,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$value(life),
+													_1: {ctor: '[]'}
+												},
+												{ctor: '[]'}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}
+						});
+				},
+				now));
+	});
+var _user$project$BucketList$description = function (items) {
+	var n = _elm_lang$core$List$length(items);
+	return A2(
+		_elm_lang$html$Html$p,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				_elm_lang$core$Basics$toString(n)),
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$span,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('bucket-list-description'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(i.description),
-						_1: {ctor: '[]'}
-					}),
+				_0: _elm_lang$html$Html$text(' things to do before I die.'),
 				_1: {ctor: '[]'}
 			}
 		});
 };
-var _user$project$BucketList$list = function (model) {
-	var _p0 = model.items;
-	switch (_p0.ctor) {
-		case 'Success':
-			var _p2 = _p0._0;
-			var list = model.showDone ? _p2 : A2(
-				_elm_lang$core$List$filter,
-				function (_p1) {
-					return !function (_) {
-						return _.done;
-					}(_p1);
-				},
-				_p2);
-			return A2(
-				_elm_lang$html$Html$ul,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('bucket'),
-					_1: {ctor: '[]'}
-				},
-				A2(_elm_lang$core$List$map, _user$project$BucketList$item, list));
-		case 'Loading':
-			return _elm_lang$html$Html$text('Loading...');
-		case 'Failure':
-			return _elm_lang$html$Html$text('Error fetching bucket list items');
-		default:
-			return _elm_lang$html$Html$text('');
-	}
-};
-var _user$project$BucketList$description = function (webdata) {
-	var _p3 = _krisajenkins$remotedata$RemoteData$toMaybe(webdata);
-	if (_p3.ctor === 'Just') {
-		var n = _elm_lang$core$List$length(_p3._0);
-		return A2(
-			_elm_lang$html$Html$p,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(
-					_elm_lang$core$Basics$toString(n)),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(' things to do before I die.'),
-					_1: {ctor: '[]'}
-				}
-			});
-	} else {
-		return _elm_lang$html$Html$text('');
-	}
-};
 var _user$project$BucketList$update = F2(
 	function (msg, model) {
-		var _p4 = msg;
-		if (_p4.ctor === 'InitialResponse') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{items: _p4._0}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		} else {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{showDone: !model.showDone}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
+		var _p1 = msg;
+		switch (_p1.ctor) {
+			case 'InitialResponse':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{items: _p1._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ToggleShowDone':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{showDone: !model.showDone}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							now: _elm_lang$core$Maybe$Just(_p1._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 var _user$project$BucketList$checkboxDecoder = A2(
 	_elm_lang$core$Json_Decode$andThen,
 	function (string) {
-		var _p5 = string;
-		if (_p5 === 'TRUE') {
+		var _p2 = string;
+		if (_p2 === 'TRUE') {
 			return _elm_lang$core$Json_Decode$succeed(true);
 		} else {
 			return _elm_lang$core$Json_Decode$succeed(false);
 		}
 	},
 	_elm_lang$core$Json_Decode$string);
+var _user$project$BucketList$googleApiKey = 'AIzaSyBbS6tLJC7EKZBmeiAywSlzTOQ-selKBns';
 var _user$project$BucketList$sheetId = '1Ehi5fNGVOfIR93FN5N4fNWfacvgSU17Vi3oFFmg17C8';
 var _user$project$BucketList$sheetUri = _elm_lang$core$String$concat(
 	{
@@ -10179,8 +10341,12 @@ var _user$project$BucketList$sheetUri = _elm_lang$core$String$concat(
 			_0: _user$project$BucketList$sheetId,
 			_1: {
 				ctor: '::',
-				_0: '/values/Sheet1!A1:C99?key=AIzaSyBbS6tLJC7EKZBmeiAywSlzTOQ-selKBns',
-				_1: {ctor: '[]'}
+				_0: '/values/Sheet1!A1:C99?key=',
+				_1: {
+					ctor: '::',
+					_0: _user$project$BucketList$googleApiKey,
+					_1: {ctor: '[]'}
+				}
 			}
 		}
 	});
@@ -10197,9 +10363,9 @@ var _user$project$BucketList$shuffle = function (items) {
 		},
 		_elm_lang$core$Time$now);
 };
-var _user$project$BucketList$Model = F2(
-	function (a, b) {
-		return {items: a, showDone: b};
+var _user$project$BucketList$Model = F3(
+	function (a, b, c) {
+		return {items: a, showDone: b, now: c};
 	});
 var _user$project$BucketList$Item = F2(
 	function (a, b) {
@@ -10230,80 +10396,110 @@ var _user$project$BucketList$decoder = A2(
 	'values',
 	_elm_lang$core$Json_Decode$list(_user$project$BucketList$itemDecoder));
 var _user$project$BucketList$initialRequest = A2(_elm_lang$http$Http$get, _user$project$BucketList$sheetUri, _user$project$BucketList$decoder);
+var _user$project$BucketList$NewTime = function (a) {
+	return {ctor: 'NewTime', _0: a};
+};
 var _user$project$BucketList$ToggleShowDone = {ctor: 'ToggleShowDone'};
-var _user$project$BucketList$view = function (model) {
+var _user$project$BucketList$toggle = function (showDone) {
 	return A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
+		_elm_lang$html$Html$label,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('bucket-list-toggle'),
+			_1: {ctor: '[]'}
+		},
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$h1,
+				_elm_lang$html$Html$input,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$checked(showDone),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$BucketList$ToggleShowDone),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Show achieved items'),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$BucketList$view = function (model) {
+	var _p3 = model.items;
+	switch (_p3.ctor) {
+		case 'Success':
+			var _p4 = _p3._0;
+			return A2(
+				_elm_lang$html$Html$div,
 				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text('Bucket List'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _user$project$BucketList$description(model.items),
-				_1: {
-					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$label,
+						_elm_lang$html$Html$h1,
+						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('bucket-list-toggle'),
+							_0: _elm_lang$html$Html$text('Bucket List'),
 							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$input,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$checked(model.showDone),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onClick(_user$project$BucketList$ToggleShowDone),
-											_1: {ctor: '[]'}
-										}
-									}
-								},
-								{ctor: '[]'}),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Show achieved items'),
-								_1: {ctor: '[]'}
-							}
 						}),
 					_1: {
 						ctor: '::',
-						_0: _user$project$BucketList$list(model),
-						_1: {ctor: '[]'}
+						_0: _user$project$BucketList$description(_p4),
+						_1: {
+							ctor: '::',
+							_0: A2(_user$project$BucketList$progress, _p4, model.now),
+							_1: {
+								ctor: '::',
+								_0: _user$project$BucketList$toggle(model.showDone),
+								_1: {
+									ctor: '::',
+									_0: A2(_user$project$BucketList$list, _p4, model),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
 					}
-				}
-			}
-		});
+				});
+		case 'Loading':
+			return _elm_lang$html$Html$text('Loading...');
+		case 'Failure':
+			return _elm_lang$html$Html$text('Error fetching bucket list items');
+		default:
+			return _elm_lang$html$Html$text('');
+	}
 };
 var _user$project$BucketList$InitialResponse = function (a) {
 	return {ctor: 'InitialResponse', _0: a};
 };
 var _user$project$BucketList$init = {
 	ctor: '_Tuple2',
-	_0: {items: _krisajenkins$remotedata$RemoteData$Loading, showDone: true},
-	_1: A2(
-		_elm_lang$core$Platform_Cmd$map,
-		_user$project$BucketList$InitialResponse,
-		_krisajenkins$remotedata$RemoteData$asCmd(
-			A2(
-				_elm_lang$core$Task$andThen,
-				_user$project$BucketList$shuffle,
-				_elm_lang$http$Http$toTask(_user$project$BucketList$initialRequest))))
+	_0: {items: _krisajenkins$remotedata$RemoteData$Loading, showDone: true, now: _elm_lang$core$Maybe$Nothing},
+	_1: _elm_lang$core$Platform_Cmd$batch(
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$core$Platform_Cmd$map,
+				_user$project$BucketList$InitialResponse,
+				_krisajenkins$remotedata$RemoteData$asCmd(
+					A2(
+						_elm_lang$core$Task$andThen,
+						_user$project$BucketList$shuffle,
+						_elm_lang$http$Http$toTask(_user$project$BucketList$initialRequest)))),
+			_1: {
+				ctor: '::',
+				_0: A2(_elm_lang$core$Task$perform, _user$project$BucketList$NewTime, _elm_lang$core$Time$now),
+				_1: {ctor: '[]'}
+			}
+		})
 };
 var _user$project$BucketList$main = _elm_lang$html$Html$program(
 	{
