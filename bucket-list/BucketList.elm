@@ -6,9 +6,14 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
 import Json.Decode as Json
+import OpenSolid.Arc2d as Arc2d
+import OpenSolid.Point2d as Point2d
+import OpenSolid.Svg as Svg
 import Random
 import Random.List
 import RemoteData exposing (RemoteData(..), WebData)
+import Svg exposing (Svg)
+import Svg.Attributes as Attributes
 import Task exposing (Task)
 import Time exposing (Time)
 
@@ -177,7 +182,7 @@ description items =
         n =
             List.length items
     in
-    p []
+    p [ class "description" ]
         [ text (toString n)
         , text " things to do before I die."
         ]
@@ -190,33 +195,76 @@ progress items now =
             let
                 life =
                     lifeProgress time
-                        |> roundProgress
-                        |> toString
 
                 list =
                     listProgress items
-                        |> roundProgress
-                        |> toString
             in
             div []
-                [ p []
-                    [ text "List progress "
-                    , meter [ value list ] []
-                    ]
-                , p []
-                    [ text "Life progress "
-                    , meter [ value life ] []
-                    ]
+                [ h2 [] [ text "Progress" ]
+                , progressArcs life list
                 ]
         )
         now
         |> Maybe.withDefault (text "")
 
 
+progressArcs : Float -> Float -> Svg a
+progressArcs life list =
+    Svg.svg [ Attributes.width "150", Attributes.height "150", Attributes.viewBox "0 0 120 120" ]
+        [ Svg.circle
+            [ Attributes.cx "60"
+            , Attributes.cy "60"
+            , Attributes.r "30"
+            , Attributes.fill "none"
+            , Attributes.stroke "#e5e5e5"
+            , Attributes.strokeWidth "20"
+            ]
+            []
+        , Svg.circle
+            [ Attributes.cx "60"
+            , Attributes.cy "60"
+            , Attributes.r "50"
+            , Attributes.fill "none"
+            , Attributes.stroke "#f4f4f4"
+            , Attributes.strokeWidth "20"
+            ]
+            []
+        , Svg.arc2d
+            [ Attributes.stroke "#ea3f85"
+            , Attributes.strokeWidth "20"
+            , Attributes.fill "none"
+            , Attributes.strokeLinecap "round"
+            ]
+            (Arc2d.with
+                { centerPoint =
+                    Point2d.fromCoordinates ( 60, 60 )
+                , startPoint =
+                    Point2d.fromCoordinates ( 60, 10 )
+                , sweptAngle = turns life
+                }
+            )
+        , Svg.arc2d
+            [ Attributes.stroke "#3c56ef"
+            , Attributes.strokeWidth "20"
+            , Attributes.fill "none"
+            , Attributes.strokeLinecap "round"
+            ]
+            (Arc2d.with
+                { centerPoint =
+                    Point2d.fromCoordinates ( 60, 60 )
+                , startPoint =
+                    Point2d.fromCoordinates ( 60, 30 )
+                , sweptAngle = turns list
+                }
+            )
+        ]
+
+
 toggle : Bool -> Html Msg
 toggle showDone =
     label [ class "bucket-list-toggle" ]
         [ input [ type_ "checkbox", checked showDone, onClick ToggleShowDone ] []
+        , span [ class "fake-toggle" ] []
         , text "Show achieved items"
         ]
 
