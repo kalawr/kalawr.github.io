@@ -216,6 +216,15 @@ input:checked + .fake-toggle::before {
 
 .description {
     color: #ccc;
+    font-size: 1.7em;
+    margin-top: 0;
 }
 
-h1 {}
+h1 {
+    font-size: 4em;
+    margin-bottom: 0;
+}
+
+header {
+    margin-bottom: 20px;
+}

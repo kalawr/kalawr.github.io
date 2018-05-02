@@ -211,52 +211,58 @@ progress items now =
 progressArcs : Float -> Float -> Svg a
 progressArcs life list =
     Svg.svg [ Attributes.width "150", Attributes.height "150", Attributes.viewBox "0 0 120 120" ]
-        [ Svg.circle
-            [ Attributes.cx "60"
-            , Attributes.cy "60"
-            , Attributes.r "30"
-            , Attributes.fill "none"
-            , Attributes.stroke "#e5e5e5"
-            , Attributes.strokeWidth "20"
+        [ Svg.g []
+            [ Svg.title [] [ Svg.text "Life progress" ]
+            , Svg.circle
+                [ Attributes.cx "60"
+                , Attributes.cy "60"
+                , Attributes.r "50"
+                , Attributes.fill "none"
+                , Attributes.stroke "#f4f4f4"
+                , Attributes.strokeWidth "20"
+                ]
+                []
+            , Svg.arc2d
+                [ Attributes.stroke "#ea3f85"
+                , Attributes.strokeWidth "20"
+                , Attributes.fill "none"
+                , Attributes.strokeLinecap "round"
+                ]
+                (Arc2d.with
+                    { centerPoint =
+                        Point2d.fromCoordinates ( 60, 60 )
+                    , startPoint =
+                        Point2d.fromCoordinates ( 60, 10 )
+                    , sweptAngle = turns life
+                    }
+                )
             ]
-            []
-        , Svg.circle
-            [ Attributes.cx "60"
-            , Attributes.cy "60"
-            , Attributes.r "50"
-            , Attributes.fill "none"
-            , Attributes.stroke "#f4f4f4"
-            , Attributes.strokeWidth "20"
+        , Svg.g []
+            [ Svg.title [] [ Svg.text "List progress" ]
+            , Svg.circle
+                [ Attributes.cx "60"
+                , Attributes.cy "60"
+                , Attributes.r "30"
+                , Attributes.fill "none"
+                , Attributes.stroke "#e5e5e5"
+                , Attributes.strokeWidth "20"
+                ]
+                []
+            , Svg.arc2d
+                [ Attributes.stroke "#3c56ef"
+                , Attributes.strokeWidth "20"
+                , Attributes.fill "none"
+                , Attributes.strokeLinecap "round"
+                ]
+                (Arc2d.with
+                    { centerPoint =
+                        Point2d.fromCoordinates ( 60, 60 )
+                    , startPoint =
+                        Point2d.fromCoordinates ( 60, 30 )
+                    , sweptAngle = turns list
+                    }
+                )
             ]
-            []
-        , Svg.arc2d
-            [ Attributes.stroke "#ea3f85"
-            , Attributes.strokeWidth "20"
-            , Attributes.fill "none"
-            , Attributes.strokeLinecap "round"
-            ]
-            (Arc2d.with
-                { centerPoint =
-                    Point2d.fromCoordinates ( 60, 60 )
-                , startPoint =
-                    Point2d.fromCoordinates ( 60, 10 )
-                , sweptAngle = turns life
-                }
-            )
-        , Svg.arc2d
-            [ Attributes.stroke "#3c56ef"
-            , Attributes.strokeWidth "20"
-            , Attributes.fill "none"
-            , Attributes.strokeLinecap "round"
-            ]
-            (Arc2d.with
-                { centerPoint =
-                    Point2d.fromCoordinates ( 60, 60 )
-                , startPoint =
-                    Point2d.fromCoordinates ( 60, 30 )
-                , sweptAngle = turns list
-                }
-            )
         ]
 
 

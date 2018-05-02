@@ -15187,124 +15187,160 @@ var _user$project$BucketList$progressArcs = F2(
 			{
 				ctor: '::',
 				_0: A2(
-					_elm_lang$svg$Svg$circle,
+					_elm_lang$svg$Svg$g,
+					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$cx('60'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$cy('60'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$r('30'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$fill('none'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$stroke('#e5e5e5'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$strokeWidth('20'),
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$svg$Svg$circle,
-						{
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$cx('60'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$cy('60'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$r('50'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$fill('none'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$stroke('#f4f4f4'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$strokeWidth('20'),
-												_1: {ctor: '[]'}
-											}
-										}
-									}
-								}
-							}
-						},
-						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
 						_0: A2(
-							_opensolid$svg$OpenSolid_Svg$arc2d,
+							_elm_lang$svg$Svg$title,
+							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$stroke('#ea3f85'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$strokeWidth('20'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$fill('none'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$strokeLinecap('round'),
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							},
-							_opensolid$geometry$OpenSolid_Arc2d$with(
-								{
-									centerPoint: _opensolid$geometry$OpenSolid_Point2d$fromCoordinates(
-										{ctor: '_Tuple2', _0: 60, _1: 60}),
-									startPoint: _opensolid$geometry$OpenSolid_Point2d$fromCoordinates(
-										{ctor: '_Tuple2', _0: 60, _1: 10}),
-									sweptAngle: _elm_lang$core$Basics$turns(life)
-								})),
+								_0: _elm_lang$svg$Svg$text('Life progress'),
+								_1: {ctor: '[]'}
+							}),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_opensolid$svg$OpenSolid_Svg$arc2d,
+								_elm_lang$svg$Svg$circle,
 								{
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$stroke('#3c56ef'),
+									_0: _elm_lang$svg$Svg_Attributes$cx('60'),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$strokeWidth('20'),
+										_0: _elm_lang$svg$Svg_Attributes$cy('60'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$fill('none'),
+											_0: _elm_lang$svg$Svg_Attributes$r('50'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$strokeLinecap('round'),
-												_1: {ctor: '[]'}
+												_0: _elm_lang$svg$Svg_Attributes$fill('none'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$stroke('#f4f4f4'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$strokeWidth('20'),
+														_1: {ctor: '[]'}
+													}
+												}
 											}
 										}
 									}
 								},
-								_opensolid$geometry$OpenSolid_Arc2d$with(
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_opensolid$svg$OpenSolid_Svg$arc2d,
 									{
-										centerPoint: _opensolid$geometry$OpenSolid_Point2d$fromCoordinates(
-											{ctor: '_Tuple2', _0: 60, _1: 60}),
-										startPoint: _opensolid$geometry$OpenSolid_Point2d$fromCoordinates(
-											{ctor: '_Tuple2', _0: 60, _1: 30}),
-										sweptAngle: _elm_lang$core$Basics$turns(list)
-									})),
-							_1: {ctor: '[]'}
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$stroke('#ea3f85'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$strokeWidth('20'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$fill('none'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$strokeLinecap('round'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									},
+									_opensolid$geometry$OpenSolid_Arc2d$with(
+										{
+											centerPoint: _opensolid$geometry$OpenSolid_Point2d$fromCoordinates(
+												{ctor: '_Tuple2', _0: 60, _1: 60}),
+											startPoint: _opensolid$geometry$OpenSolid_Point2d$fromCoordinates(
+												{ctor: '_Tuple2', _0: 60, _1: 10}),
+											sweptAngle: _elm_lang$core$Basics$turns(life)
+										})),
+								_1: {ctor: '[]'}
+							}
 						}
-					}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$g,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$title,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg$text('List progress'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$svg$Svg$circle,
+									{
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$cx('60'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$cy('60'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$r('30'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$fill('none'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$stroke('#e5e5e5'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$strokeWidth('20'),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_opensolid$svg$OpenSolid_Svg$arc2d,
+										{
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$stroke('#3c56ef'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$strokeWidth('20'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$fill('none'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$strokeLinecap('round'),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										},
+										_opensolid$geometry$OpenSolid_Arc2d$with(
+											{
+												centerPoint: _opensolid$geometry$OpenSolid_Point2d$fromCoordinates(
+													{ctor: '_Tuple2', _0: 60, _1: 60}),
+												startPoint: _opensolid$geometry$OpenSolid_Point2d$fromCoordinates(
+													{ctor: '_Tuple2', _0: 60, _1: 30}),
+												sweptAngle: _elm_lang$core$Basics$turns(list)
+											})),
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
 				}
 			});
 	});
