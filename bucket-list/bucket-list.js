@@ -15073,6 +15073,85 @@ var _opensolid$svg$OpenSolid_Svg$render2d = F2(
 			});
 	});
 
+var _user$project$BucketList$description = A2(
+	_elm_lang$html$Html$aside,
+	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$h2,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Project Description'),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$a,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$href('https://github.com/kalawr/kalawr.github.io/tree/master/bucket-list'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Source'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('This is an '),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$a,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$href('http://elm-lang.org/'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Elm'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(' program that requests data via Google Sheets API. Data is then decoded from JSON, shuffled and displayed as HTML. Portion of the view (radial progress elements) is built with SVG using '),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$a,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$href('https://github.com/opensolid'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('OpenSolid'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(', an open-source set of Elm geometry libraries.'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
 var _user$project$BucketList$roundProgress = function (n) {
 	return function (a) {
 		return A2(
@@ -15376,7 +15455,7 @@ var _user$project$BucketList$progress = F2(
 				},
 				now));
 	});
-var _user$project$BucketList$description = function (items) {
+var _user$project$BucketList$subheading = function (items) {
 	var n = _elm_lang$core$List$length(items);
 	return A2(
 		_elm_lang$html$Html$p,
@@ -15573,7 +15652,7 @@ var _user$project$BucketList$view = function (model) {
 						}),
 					_1: {
 						ctor: '::',
-						_0: _user$project$BucketList$description(_p4),
+						_0: _user$project$BucketList$subheading(_p4),
 						_1: {
 							ctor: '::',
 							_0: A2(_user$project$BucketList$progress, _p4, model.now),
@@ -15583,7 +15662,11 @@ var _user$project$BucketList$view = function (model) {
 								_1: {
 									ctor: '::',
 									_0: A2(_user$project$BucketList$list, _p4, model),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: _user$project$BucketList$description,
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						}

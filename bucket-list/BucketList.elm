@@ -160,10 +160,11 @@ view model =
         Success items ->
             div []
                 [ h1 [] [ text "Bucket List" ]
-                , description items
+                , subheading items
                 , progress items model.now
                 , toggle model.showDone
                 , list items model
+                , description
                 ]
 
         Loading ->
@@ -176,8 +177,8 @@ view model =
             text ""
 
 
-description : List Item -> Html Msg
-description items =
+subheading : List Item -> Html Msg
+subheading items =
     let
         n =
             List.length items
@@ -343,6 +344,21 @@ roundProgress n =
         |> round
         |> toFloat
         |> (\a -> (/) a 100)
+
+
+description : Html Msg
+description =
+    aside []
+        [ h2 [] [ text "Project Description" ]
+        , a [ href "https://github.com/kalawr/kalawr.github.io/tree/master/bucket-list" ] [ text "Source" ]
+        , p []
+            [ text "This is an "
+            , a [ href "http://elm-lang.org/" ] [ text "Elm" ]
+            , text " program that requests data via Google Sheets API. Data is then decoded from JSON, shuffled and displayed as HTML. Portion of the view (radial progress elements) is built with SVG using "
+            , a [ href "https://github.com/opensolid" ] [ text "OpenSolid" ]
+            , text ", an open-source set of Elm geometry libraries."
+            ]
+        ]
 
 
 main : Program Never Model Msg
